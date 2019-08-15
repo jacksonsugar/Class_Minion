@@ -23,5 +23,3 @@ In order to set up a new camera system -->
 9: Open Arduino IDE and upload the Class_Minion_uC.ino script to the Nano
 
 10: Connect the computer and micro-controller to the PCB
-
-Done.
