@@ -1,0 +1,132 @@
+// Initial Questions
+
+What do you want the last 3 of your local IP to be?
+
+Enable debug mode? [Y/N]
+
+	Y = sudo raspi-config nonint do_boot_splash 1
+
+	N = sudo raspi-config nonint do_boot_splash 0
+
+Begin sampling once install is complete? [Y/N]
+
+	Y = All other scripts
+
+	N = Keep_Me_Alive.py
+
+// Set localle to Iceland 
+
+sudo apt-get update && sudo apt-get upgrade -y
+
+sudo apt-get install build-essential python-smbus i2c-tools 
+
+---- RASPI-CONFIG ----
+
+https://raspberrypi.stackexchange.com/questions/28907/how-could-one-automate-the-raspbian-raspi-config-setup
+
+// Boot options
+
+	// CLI autologin
+
+	sudo raspi-config nonint do_boot_behaviour B2
+
+// Locale
+
+	sudo raspi-config nonint do_change_locale en_IS.UTF-8
+
+//Interfacing Options
+	// Enable Camera
+
+	sudo raspi-config nonint do_camera 0
+
+	// Enable ssh
+
+	sudo raspi-config nonint do_ssh 0
+	
+	// Enable i2c
+
+	sudo raspi-config nonint do_i2c 0
+
+	// Enable Remote GPIO
+
+	sudo raspi-config nonint do_rgpio 0
+
+// Full config
+
+sudo raspi-config nonint do_change_locale en_IS.UTF-8 nonint do_boot_behaviour B2 nonint do_boot_splash 1 nonint do_camera 0 nonint do_ssh 0 nonint do_i2c 0 nonint do_rgpio 0
+
+--------
+
+// Set up Clock
+    sudo apt-get -y remove fake-hwclock
+    sudo update-rc.d -f fake-hwclock remove
+    sudo systemctl disable fake-hwclock
+
+    sudo nano /lib/udev/hwclock-set
+
+	Comment out
+	
+	if [ -e /run/systemd/system ] ; then
+	 exit 0
+	fi
+	
+	/sbin/hwclock --rtc=$dev --systz --badyear
+
+	/sbin/hwclock --rtc=$dev --systz
+
+
+    // Then run
+    sudo hwclock -D -r
+    sudo hwclock -w
+
+// Set up aliases
+
+	sudo nano ~/.bashrc
+		
+		# Minion aliases to make life easy
+		alias clear_minion_pics='sudo rm -rf /home/pi/Documents/minion_pics/*'
+		
+		alias list_minion_pics='ls /home/pi/Documents/minion_pics/'
+		
+		alias kill_minion='sudo killall Class_Minion.py shutdown.py python'
+		
+		alias ifswitch='sudo python /home/pi/Documents/Minion_tools/dhcp-switch.py'
+		
+		alias RTC-set='sudo python /home/pi/Documents/Minion_tools/RTC-set.py'
+		
+		alias minion-off='sudo python ~/Documents/Documents/Minion_tools/Shutdown.py'
+			
+		alias preview_minion='sudo raspivid -t 0'
+
+	source ~/.bashrc
+
+// Set up custom splash
+
+	sudo mv /usr/share/plymouth/themes/pix/splash.png /usr/share/plymouth/themes/pix/splash.png.old
+
+	sudo cp source/splash.png /usr/share/plymouth/themes/pix/
+
+// Configure dhcp
+
+	sudo mv source/dhcp/dhcpcd.conf source/dhcp/dhcpcd.minion /etc/
+
+// Create empty folders for data and scripts
+
+	mkdir ~/Documents/Minion_tools ~/Documents/minion_pics ~/Documents/minion_data ~/Documents/Minion_scripts
+
+// Move tools to proper directories and install needed libraries
+
+	sudo cp source/dhcp-configure.py source/dhcp-switch.py source/RTC-set.py source/Shutdown.py source/flasher.py ~/Documents/Minion_tools/
+
+	sudo cp source/Class_minion.py source/ADXL345_Sampler_100Hz.py source/Temp+Pres.py source/drivers/ms5837-python/ms5837.py ~/Documents/Minion_scripts
+
+	sudo python source/drivers/tsys01-python/setup.py install
+
+// Set up automatic scripts
+
+	sudo nano /etc/rc.local
+		
+		either
+		Keep_Me_Alive.py 
+		or
+		Class_Minion.py ADXL345_Sampler_100Hz.py and Temp+Pres.py
