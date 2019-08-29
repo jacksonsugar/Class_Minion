@@ -31,11 +31,11 @@ def yes_no(answer):
 
 IP_addr = input('What local IP extension would you like to use? ')
 
-if len(str(IP_addr)) > 3 or len(str(IP_addr)) < 1 or IP_addr <= 1 or IP_addr >= 255:
+if len(str(IP_addr)) > 3 or len(str(IP_addr)) < 1 or IP_addr <= 1 or IP_addr >= 254:
 	IP_fail = 1
 	while IP_fail == 1: 
-		IP_addr = input('Illigal IP address: 192.168.0.%s! Please try again: ' % IP_addr)
-		if len(str(IP_addr)) > 3 or len(str(IP_addr)) < 1 or IP_addr <= 1 or IP_addr >= 255:
+		IP_addr = input('Illegal IP address: 192.168.0.%s! Please try again: ' % IP_addr)
+		if len(str(IP_addr)) > 3 or len(str(IP_addr)) < 1 or IP_addr <= 1 or IP_addr >= 254:
 			pass
 		else:
 			IP_fail = 0
