@@ -94,26 +94,8 @@ os.system('sudo cp source/Class_Minion.py source/ADXL345_Sampler_100Hz.py source
 os.system('sudo python source/drivers/tsys01-python/setup.py install')
 
 # Set up and sync RTC
-
-RTC_type = input('What RTC are you using? \n --- (1): pcf8523DS3231 \n --- (2): DS3231\n --- ')
-
-if len(str(RTC_type)) != 1 or RTC_type < 1 or RTC_type > 2:
-	RTC_fail = 1
-	while RTC_fail == 1: 
-		RTC_addr = input('Please select RTC using the numbers below: \n --- (1): DS3231 \n --- (2): pcf8523')
-		if len(str(RTC_type)) != 1 or RTC_type < 1 or RTC_type > 2:
-			pass
-		else:
-			RTC_fail = 0
-else:
-	print "Appending /boot/config.txt"
-
-if RTC_type == 1:
-	os.system("echo 'dtoverlay=i2c-rtc,pcf8523' >> /boot/config.txt")
-elif RTC_type == 2:
-	os.system("echo 'dtoverlay=i2c-rtc,ds3231' >> /boot/config.txt")
-else:
-	print "How did you get here?"
+print "Appending /boot/config.txt"
+os.system("echo 'dtoverlay=i2c-rtc,pcf8523' >> /boot/config.txt")
 
 # Set pi to launch rest of script after reboot
 os.system("sudo sed -i '/# Print the IP/isudo python /home/pi/Documents/Minion_scripts/RTC_Finish.py\n\n' /etc/rc.local")
