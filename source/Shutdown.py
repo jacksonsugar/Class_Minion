@@ -6,7 +6,7 @@ import os
 
 GPIO.setwarnings(False)
 
-wifi=38
+wifi=7
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(wifi, GPIO.OUT)
