@@ -1,7 +1,11 @@
 # Minion aliases to make life easy
 alias clear_minion_pics='sudo rm -rf /home/pi/Documents/minion_pics/*'
 
+alias clear_minion_data='sudo rm -rf /home/pi/Documents/minion_data/*'
+
 alias list_minion_pics='ls /home/pi/Documents/minion_pics/'
+
+alias list_minion_data='ls /home/pi/Documents/minion_data/'
 
 alias kill_minion='sudo killall Class_Minion.py shutdown.py python'
 
